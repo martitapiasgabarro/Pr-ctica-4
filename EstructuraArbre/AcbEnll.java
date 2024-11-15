@@ -31,8 +31,12 @@ public class AcbEnll<E extends Comparable<E>> implements Acb<E> {
 
     @Override
     public void inserir(E element) throws ArbreException {
+        if (membre(element)) {
+            throw new ArbreException("Element already exists.");
+        }
         arrel = inserirRecursive(arrel, element);
     }
+
 
     private NodeA inserirRecursive(NodeA node, E element) throws ArbreException {
         if (node == null) return new NodeA(element);
