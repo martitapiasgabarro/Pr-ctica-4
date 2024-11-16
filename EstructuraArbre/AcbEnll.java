@@ -4,7 +4,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class AcbEnll<E extends Comparable<E>> implements Acb<E> {
-    private NodeA arrel;
+
+    private NodeA arrel; // Node arrel de l'arbre
 
     private class NodeA implements Cloneable {
         E info;
@@ -18,70 +19,77 @@ public class AcbEnll<E extends Comparable<E>> implements Acb<E> {
         }
 
         @Override
-        protected NodeA clone() {
-            try {
-                NodeA copia = (NodeA) super.clone();
-                if (esq != null) copia.esq = esq.clone();
-                if (dret != null) copia.dret = dret.clone();
-                return copia;
-            } catch (CloneNotSupportedException e) {
-                return null; // Confiança que això no passarà
-            }
+        protected NodeA clone() throws CloneNotSupportedException {
+            NodeA copia = (NodeA) super.clone();
+            if (esq != null) copia.esq = esq.clone();
+            if (dret != null) copia.dret = dret.clone();
+            return copia;
         }
     }
 
+    // Constructor per defecte: arbre buit
     public AcbEnll() {
         this.arrel = null;
     }
 
+    // Constructor amb node arrel
+    public AcbEnll(NodeA arrel) {
+        this.arrel = arrel;
+    }
+
+
+    // Inserció d'un element
     @Override
     public void inserir(E element) throws ArbreException {
         if (membre(element)) {
-            throw new ArbreException("Element already exists.");
+            throw new ArbreException("Element ja existeix.");
         }
         arrel = inserirRecursive(arrel, element);
     }
 
-
-    private NodeA inserirRecursive(NodeA node, E element) throws ArbreException {
+    private NodeA inserirRecursive(NodeA node, E element) {
         if (node == null) return new NodeA(element);
-        int cmp = element.compareTo(node.info);
-        if (cmp < 0) node.esq = inserirRecursive(node.esq, element);
-        else if (cmp > 0) node.dret = inserirRecursive(node.dret, element);
-        else throw new ArbreException("Element already exists.");
+        if (element.compareTo(node.info) < 0) {
+            node.esq = inserirRecursive(node.esq, element);
+        } else if (element.compareTo(node.info) > 0) {
+            node.dret = inserirRecursive(node.dret, element);
+        }
         return node;
     }
 
-    @Override
+    // Esborrat d'un element
     public void esborrar(E element) throws ArbreException {
+        if (arrel == null) {
+            throw new ArbreException("L'arbre és buit.");
+        }
+        if (!membre(element)) {
+            throw new ArbreException("Element no trobat.");
+        }
         arrel = esborrarRecursive(arrel, element);
     }
 
-    private NodeA esborrarRecursive(NodeA node, E element) throws ArbreException {
-        if (node == null) throw new ArbreException("Element not found.");
-        int cmp = element.compareTo(node.info);
-        if (cmp < 0) node.esq = esborrarRecursive(node.esq, element);
-        else if (cmp > 0) node.dret = esborrarRecursive(node.dret, element);
-        else {
+
+    private NodeA esborrarRecursive(NodeA node, E element) {
+        if (node == null) return null; // Node no trobat
+        if (element.compareTo(node.info) < 0) {
+            node.esq = esborrarRecursive(node.esq, element); // Cerca a l'esquerra
+        } else if (element.compareTo(node.info) > 0) {
+            node.dret = esborrarRecursive(node.dret, element); // Cerca a la dreta
+        } else { // Node trobat
+            // Node trobat
             if (node.esq == null) return node.dret;
             if (node.dret == null) return node.esq;
-            NodeA minNode = findMin(node.dret);
-            node.info = minNode.info;
-            node.dret = esborrarMinim(node.dret);
+            // Node amb dos fills
+            node.info = trobarMinim(node.dret).info;
+            node.dret = esborrarRecursive(node.dret, node.info);
         }
         return node;
     }
 
-    private NodeA findMin(NodeA node) {
+    private NodeA trobarMinim(NodeA node) {
         while (node.esq != null) {
             node = node.esq;
         }
-        return node;
-    }
-
-    private NodeA esborrarMinim(NodeA node) {
-        if (node.esq == null) return node.dret;
-        node.esq = esborrarMinim(node.esq);
         return node;
     }
 
@@ -92,34 +100,39 @@ public class AcbEnll<E extends Comparable<E>> implements Acb<E> {
 
     private boolean membreRecursive(NodeA node, E element) {
         if (node == null) return false;
-        int cmp = element.compareTo(node.info);
-        if (cmp < 0) return membreRecursive(node.esq, element);
-        else if (cmp > 0) return membreRecursive(node.dret, element);
-        return true;
+        if (element.compareTo(node.info) == 0) return true;
+        if (element.compareTo(node.info) < 0) return membreRecursive(node.esq, element);
+        return membreRecursive(node.dret, element);
     }
 
     @Override
     public E arrel() throws ArbreException {
-        if (arrel == null) throw new ArbreException("Tree is empty.");
+        if (arbreBuit()) {
+            throw new ArbreException("L'arbre és buit.");
+        }
         return arrel.info;
     }
 
+
     @Override
     public Acb<E> fillEsquerre() throws CloneNotSupportedException {
-        AcbEnll<E> subArbreEsquerre = new AcbEnll<>();
         if (arrel != null && arrel.esq != null) {
-            subArbreEsquerre.arrel = arrel.esq.clone();
+            AcbEnll<E> subarbre = new AcbEnll<>();
+            subarbre.arrel = arrel.esq.clone();
+            return subarbre;
         }
-        return subArbreEsquerre;
+        return new AcbEnll<>();
     }
+
 
     @Override
     public Acb<E> fillDret() throws CloneNotSupportedException {
-        AcbEnll<E> subArbreDret = new AcbEnll<>();
         if (arrel != null && arrel.dret != null) {
-            subArbreDret.arrel = arrel.dret.clone();
+            AcbEnll<E> subarbre = new AcbEnll<>();
+            subarbre.arrel = arrel.dret.clone();
+            return subarbre;
         }
-        return subArbreDret;
+        return new AcbEnll<>();
     }
 
     @Override
