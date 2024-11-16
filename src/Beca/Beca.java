@@ -90,6 +90,7 @@ public class Beca {
                     arbreACB.esborrar(alumne);
                 }
             }
+            llistaDescendent = arbreACB.getDescendentList();
         } catch (ArbreException e) {
             System.err.println("Error esborrant alumnes: " + e.getMessage());
         }
