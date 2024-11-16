@@ -15,6 +15,7 @@ public class Assignatura {
         this.nom = nom;
         this.credits = credits;
         this.nota = nota;
+        //Chat
         this.mHonor = (nota >= EXCELLENT) && mHonor;
     }
 
@@ -50,6 +51,7 @@ public class Assignatura {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof Assignatura)) return false;
+        //Que fa aixo
         Assignatura other = (Assignatura) obj;
         return nom.equals(other.nom);
     }

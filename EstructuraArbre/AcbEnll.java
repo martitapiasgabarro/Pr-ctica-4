@@ -4,9 +4,12 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class AcbEnll<E extends Comparable<E>> implements Acb<E> {
+    private NodeA arrel;
+
     private class NodeA implements Cloneable {
         E info;
-        NodeA esq, dret;
+        NodeA esq;
+        NodeA dret;
 
         NodeA(E info) {
             this.info = info;
@@ -15,15 +18,17 @@ public class AcbEnll<E extends Comparable<E>> implements Acb<E> {
         }
 
         @Override
-        protected NodeA clone() throws CloneNotSupportedException {
-            NodeA clonedNode = (NodeA) super.clone();
-            if (esq != null) clonedNode.esq = esq.clone();
-            if (dret != null) clonedNode.dret = dret.clone();
-            return clonedNode;
+        protected NodeA clone() {
+            try {
+                NodeA copia = (NodeA) super.clone();
+                if (esq != null) copia.esq = esq.clone();
+                if (dret != null) copia.dret = dret.clone();
+                return copia;
+            } catch (CloneNotSupportedException e) {
+                return null; // Confiança que això no passarà
+            }
         }
     }
-
-    private NodeA arrel;
 
     public AcbEnll() {
         this.arrel = null;
