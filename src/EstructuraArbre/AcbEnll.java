@@ -1,4 +1,4 @@
-package EstructuraArbre;
+package src.EstructuraArbre;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -30,11 +30,6 @@ public class AcbEnll<E extends Comparable<E>> implements Acb<E> {
     // Constructor per defecte: arbre buit
     public AcbEnll() {
         this.arrel = null;
-    }
-
-    // Constructor amb node arrel
-    public AcbEnll(NodeA arrel) {
-        this.arrel = arrel;
     }
 
 

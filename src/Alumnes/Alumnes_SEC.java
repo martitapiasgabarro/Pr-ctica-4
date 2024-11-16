@@ -1,4 +1,4 @@
-package Alumnes;
+package src.Alumnes;
 
 public class Alumnes_SEC implements Comparable<Alumnes_SEC> {
     private class Node {
@@ -60,6 +60,12 @@ public class Alumnes_SEC implements Comparable<Alumnes_SEC> {
 
     @Override
     public String toString() {
-        return cap.info.toString();
+        StringBuilder sb = new StringBuilder(cap.info.toString()).append("\n");
+        Node current = cap.next;
+        while (current != null) {
+            sb.append("  ").append(current.info).append("\n");
+            current = current.next;
+        }
+        return sb.toString();
     }
 }

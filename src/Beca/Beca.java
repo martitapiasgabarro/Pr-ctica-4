@@ -1,7 +1,9 @@
-import Alumnes.Alumnes_SEC;
-import Alumnes.Assignatura;
-import EstructuraArbre.AcbEnll;
-import EstructuraArbre.ArbreException;
+package src.Beca;
+
+import src.Alumnes.Alumnes_SEC;
+import src.Alumnes.Assignatura;
+import src.EstructuraArbre.AcbEnll;
+import src.EstructuraArbre.ArbreException;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -12,11 +14,10 @@ public class Beca {
     private AcbEnll<Alumnes_SEC> arbreACB;
     private Queue<Alumnes_SEC> llistaDescendent;
 
-    // Constructor
+    // Constructor per defecte
     public Beca() {
         arbreACB = new AcbEnll<>();
         try {
-            // Initialize with example students
             arbreACB.inserir(exempleRosa());
             arbreACB.inserir(exempleEnric());
             arbreACB.inserir(exempleRandom("Maria"));
@@ -25,17 +26,16 @@ public class Beca {
         } catch (ArbreException e) {
             System.out.println("Error initializing students: " + e.getMessage());
         }
-        // Populate descending order list
         llistaDescendent = arbreACB.getDescendentList();
     }
 
-    // Example students
+    // Exemples predefinits
     private Alumnes_SEC exempleRosa() {
         Alumnes_SEC rosa = new Alumnes_SEC("Rosa");
-        rosa.addAssignatura(new Assignatura("Fonaments de la Programació", 6, 7, false));
-        rosa.addAssignatura(new Assignatura("Programació Orientada a l'objecte", 6, 5, false));
-        rosa.addAssignatura(new Assignatura("Estructura de Dades i Algorismes", 4, 9, false));
-        rosa.addAssignatura(new Assignatura("Programació Avançada", 4, 5, false));
+        rosa.addAssignatura(new Assignatura("Fonaments de la Programació", 6, 7.0, false));
+        rosa.addAssignatura(new Assignatura("Programació Orientada a l'Objecte", 6, 5.0, false));
+        rosa.addAssignatura(new Assignatura("Estructura de Dades i Algorismes", 4, 9.0, false));
+        rosa.addAssignatura(new Assignatura("Programació Avançada", 4, 5.0, false));
         return rosa;
     }
 
@@ -57,21 +57,42 @@ public class Beca {
         return randomStudent;
     }
 
+    // Mètodes privats
+    private boolean finalRecorregut() {
+        return llistaDescendent.isEmpty();
+    }
+
+    private Alumnes_SEC segRecorregut() {
+        if (llistaDescendent == null || llistaDescendent.isEmpty()) {
+            throw new IllegalStateException("La llista descendent està buida.");
+        }
+        return llistaDescendent.poll();
+    }
+
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Llista d'alumnes en ordre descendent:\n");
+        Queue<Alumnes_SEC> copia = new LinkedList<>(llistaDescendent); // Copia per preservar l'ordre
+        while (!copia.isEmpty()) {
+            sb.append(copia.poll()).append("\n");
+        }
+        return sb.toString();
+    }
+
     // Method to delete students without honors
     public void esborraAlumnesSenseMatricula() {
-        Queue<Alumnes_SEC> llistaTemporal = new LinkedList<>();
-        for (Alumnes_SEC alumne : llistaDescendent) {
-            if (alumne.hiHa(4)) {
-                llistaTemporal.add(alumne);
-            } else {
-                try {
+        Queue<Alumnes_SEC> alumnes = arbreACB.getAscendentList();
+        try {
+            while (!alumnes.isEmpty()) {
+                Alumnes_SEC alumne = alumnes.poll();
+                if (!alumne.hiHa(4)) { // Cap assignatura amb matrícula d'honor
                     arbreACB.esborrar(alumne);
-                } catch (ArbreException e) {
-                    System.out.println("Error deleting student: " + e.getMessage());
                 }
             }
+        } catch (ArbreException e) {
+            System.err.println("Error esborrant alumnes: " + e.getMessage());
         }
-        llistaDescendent = llistaTemporal;
     }
 
     // Method to add a new student
@@ -79,20 +100,19 @@ public class Beca {
         System.out.print("Nom de l'alumne: ");
         String nom = scanner.nextLine().trim();
         Alumnes_SEC alumne = new Alumnes_SEC(nom);
-
+        System.out.println("Afegeix assignatures (nom buit per finalitzar):");
         while (true) {
             try {
-                System.out.print("Assignatura: ");
-                String assignaturaNom = scanner.nextLine().trim();
+                System.out.print("Nom de l'assignatura: ");
+                String nomAssignatura = scanner.nextLine();
+                if (nomAssignatura.isEmpty()) break;
                 System.out.print("Crèdits: ");
-                int credits = Integer.parseInt(scanner.nextLine().trim());
+                int credits = scanner.nextInt();
                 System.out.print("Nota: ");
-                double nota = Double.parseDouble(scanner.nextLine().trim());
-                System.out.print("Matrícula d'Honor (true/false): ");
-                boolean mHonor = Boolean.parseBoolean(scanner.nextLine().trim());
-
-                Assignatura assignatura = new Assignatura(assignaturaNom, credits, nota, mHonor);
-                alumne.addAssignatura(assignatura);
+                double nota = scanner.nextDouble();
+                boolean mhonor = nota >= Assignatura.EXCELLENT;
+                alumne.addAssignatura(new Assignatura(nomAssignatura, credits, nota, mhonor));
+                scanner.nextLine(); // Netejar buffer
 
                 System.out.print("Afegir una altra assignatura? (yes/no): ");
                 if (!scanner.nextLine().trim().equalsIgnoreCase("yes")) break;
@@ -113,61 +133,36 @@ public class Beca {
     }
 
 
-    // toString method to display the list of students in descending order
-    @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder();
-        for (Alumnes_SEC alumne : llistaDescendent) {
-            result.append(alumne.toString()).append("\n");
-        }
-        return result.toString();
-    }
 
-    // Main method to display menu and perform actions
+    // Main
     public static void main(String[] args) {
         Beca beca = new Beca();
-        while (true) {
-            System.out.println("1: Afegir un nou alumne");
-            System.out.println("2: Esborrar un alumne");
-            System.out.println("3: Esborrar tots els alumnes");
-            System.out.println("4: Mostrar tots els alumnes en ordre descendent");
-            System.out.println("5: Esborrar alumnes sense matrícula d'honor");
-            System.out.println("6: Sortir");
-
+        boolean sortir = false;
+        while (!sortir) {
+            System.out.println("""
+                1. Afegir un nou alumne
+                2. Esborrar un alumne a partir del seu nom
+                3. Mostrar tots els alumnes en ordre descendent
+                4. Esborrar alumnes sense matrícula d’honor
+                5. Sortir del programa
+            """);
             System.out.print("Selecciona una opció: ");
-            int opcio = Integer.parseInt(scanner.nextLine());
-
+            int opcio = scanner.nextInt();
+            scanner.nextLine(); // Netejar buffer
             switch (opcio) {
                 case 1 -> beca.afegirAlumne();
                 case 2 -> {
                     System.out.print("Nom de l'alumne a esborrar: ");
                     String nom = scanner.nextLine();
                     try {
-                        Alumnes_SEC alumne = new Alumnes_SEC(nom);
-                        beca.arbreACB.esborrar(alumne);
-                        beca.llistaDescendent = beca.arbreACB.getDescendentList();
+                        beca.arbreACB.esborrar(new Alumnes_SEC(nom));
                     } catch (ArbreException e) {
                         System.out.println("Error: " + e.getMessage());
                     }
                 }
-                case 3 -> {
-                    beca.arbreACB.buidar();
-                    beca.llistaDescendent.clear(); // També buidem la llista descendent
-                    System.out.println("Tots els alumnes han estat eliminats.");
-                }
-                case 4 -> {
-                    if (beca.arbreACB.arbreBuit()) {
-                        System.out.println("No hi ha cap alumne registrat.");
-                    } else {
-                        System.out.println(beca);
-                    }
-                }
-                case 5 -> beca.esborraAlumnesSenseMatricula();
-                case 6 -> {
-                    System.out.println("Sortint del programa.");
-                    scanner.close(); // Tanquem el Scanner aquí
-                    return; // Sortim del programa
-                }
+                case 3 -> System.out.println(beca);
+                case 4 -> beca.esborraAlumnesSenseMatricula();
+                case 5 -> sortir = true;
                 default -> System.out.println("Opció no vàlida. Torna-ho a intentar.");
             }
         }

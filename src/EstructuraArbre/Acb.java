@@ -1,4 +1,4 @@
-package EstructuraArbre;
+package src.EstructuraArbre;
 
 public interface Acb<E extends Comparable<E>> {
     void inserir(E element) throws ArbreException;

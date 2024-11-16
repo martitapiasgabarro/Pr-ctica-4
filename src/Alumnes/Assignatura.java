@@ -1,4 +1,4 @@
-package Alumnes;
+package src.Alumnes;
 
 public class Assignatura {
     public static final int APROVAT = 5;
