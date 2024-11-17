@@ -162,6 +162,7 @@ public void esborraAlumnesSenseMatricula() {
     public static void main(String[] args) {
         Beca beca = new Beca();
         boolean sortir = false;
+
         while (!sortir) {
             System.out.println("""
                 1. Afegir un nou alumne
@@ -170,21 +171,28 @@ public void esborraAlumnesSenseMatricula() {
                 4. Esborrar alumnes sense matrícula d’honor
                 5. Sortir del programa
             """);
-            System.out.print("Selecciona una opció: ");
-            int opcio = scanner.nextInt();
-            scanner.nextLine(); // Netejar buffer
-            switch (opcio) {
-                case 1 -> beca.afegirAlumne();
-                case 2 -> {
-                    System.out.print("Nom de l'alumne a esborrar: ");
-                    String nom = scanner.nextLine(); // Obtenim el nom de l'usuari
-                    beca.esborraAlumnePerNom(nom); // Crida el mètode
-                }
 
-                case 3 -> System.out.println(beca);
-                case 4 -> beca.esborraAlumnesSenseMatricula();
-                case 5 -> sortir = true;
-                default -> System.out.println("Opció no vàlida. Torna-ho a intentar.");
+            System.out.print("Selecciona una opció: ");
+            try {
+                int opcio = Integer.parseInt(scanner.nextLine().trim()); // Llegeix l'opció com a string i la converteix a int
+
+                switch (opcio) {
+                    case 1 -> beca.afegirAlumne();
+                    case 2 -> {
+                        System.out.print("Nom de l'alumne a esborrar: ");
+                        String nom = scanner.nextLine().trim(); // Obtenim el nom de l'usuari
+                        beca.esborraAlumnePerNom(nom); // Crida el mètode
+                    }
+                    case 3 -> System.out.println(beca);
+                    case 4 -> beca.esborraAlumnesSenseMatricula();
+                    case 5 -> {
+                        System.out.println("Sortint del programa. Adéu!");
+                        sortir = true;
+                    }
+                    default -> System.out.println("Opció no vàlida. Torna-ho a intentar.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada no vàlida. Introdueix un número.");
             }
         }
     }
