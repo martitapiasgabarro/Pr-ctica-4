@@ -111,6 +111,8 @@ public void esborraAlumnesSenseMatricula() {
         for (Alumnes_SEC alumne : alumnes) {
             if (!alumne.hiHa(4)) { // Si l'alumne no té matrícula d'honor
                 arbreACB.esborrar(alumne); // Esborra'l de l'arbre
+                System.out.println("Alumne sense matricula d'honor eliminats \n");
+
             }
         }
         llistaDescendent = arbreACB.getDescendentList(); // Actualitza la llista descendent
@@ -155,7 +157,6 @@ public void esborraAlumnesSenseMatricula() {
             System.out.println("Error: " + e.getMessage());
         }
     }
-
 
 
     // Main
