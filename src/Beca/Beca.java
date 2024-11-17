@@ -62,6 +62,32 @@ public class Beca {
         return randomStudent;
     }
 
+    public void esborraAlumnePerNom(String nom) {
+        Queue<Alumnes_SEC> alumnes = arbreACB.getAscendentList(); // Obtenim tots els alumnes
+        Alumnes_SEC alumneTrobat = null;
+
+        // Buscar l'alumne pel nom
+        for (Alumnes_SEC alumne : alumnes) {
+            if (alumne.getNom().equalsIgnoreCase(nom)) { // Comprova si el nom coincideix (ignorant majúscules/minúscules)
+                alumneTrobat = alumne;
+                break; // Només esborrem el primer que trobem
+            }
+        }
+
+        // Si l'alumne existeix, l'esborrem
+        if (alumneTrobat != null) {
+            try {
+                arbreACB.esborrar(alumneTrobat); // Esborra de l'arbre
+                llistaDescendent = arbreACB.getDescendentList(); // Actualitza la llista descendent
+                System.out.println("Alumne amb nom '" + nom + "' esborrat correctament.");
+            } catch (ArbreException e) {
+                System.out.println("Error en esborrar l'alumne: " + e.getMessage());
+            }
+        } else {
+            System.out.println("No s'ha trobat cap alumne amb el nom '" + nom + "'.");
+        }
+    }
+
     // Mètode per mostrar la llista d'alumnes en ordre descendent
     @Override
     public String toString() {
@@ -151,13 +177,10 @@ public void esborraAlumnesSenseMatricula() {
                 case 1 -> beca.afegirAlumne();
                 case 2 -> {
                     System.out.print("Nom de l'alumne a esborrar: ");
-                    String nom = scanner.nextLine();
-                    try {
-                        beca.arbreACB.esborrar(new Alumnes_SEC(nom));
-                    } catch (ArbreException e) {
-                        System.out.println("Error: " + e.getMessage());
-                    }
+                    String nom = scanner.nextLine(); // Obtenim el nom de l'usuari
+                    beca.esborraAlumnePerNom(nom); // Crida el mètode
                 }
+
                 case 3 -> System.out.println(beca);
                 case 4 -> beca.esborraAlumnesSenseMatricula();
                 case 5 -> sortir = true;
