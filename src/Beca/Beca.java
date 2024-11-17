@@ -138,7 +138,7 @@ public void esborraAlumnesSenseMatricula() {
                 alumne.addAssignatura(new Assignatura(nomAssignatura, credits, nota, mhonor));
                 scanner.nextLine(); // Netejar buffer
 
-                System.out.print("Afegir una altra assignatura? (yes/no): ");
+                System.out.print("Afegir una altra assignatura? (si/no): ");
                 if (!scanner.nextLine().trim().equalsIgnoreCase("Si")) break;
 
             } catch (NumberFormatException e) {
