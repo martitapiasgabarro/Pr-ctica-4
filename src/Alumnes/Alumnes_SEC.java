@@ -1,5 +1,8 @@
 package src.Alumnes;
 
+import java.lang.Comparable;
+
+
 public class Alumnes_SEC implements Comparable<Alumnes_SEC> {
     private class Node {
         Assignatura info;
@@ -68,13 +71,13 @@ public class Alumnes_SEC implements Comparable<Alumnes_SEC> {
     // Método para comparar a los alumnos por nota
     @Override
     public int compareTo(Alumnes_SEC other) {
-        int result = Double.compare(other.cap.info.getNota(), this.cap.info.getNota());  // Primero comparamos por nota
+        int result = Double.compare(this.cap.info.getNota(), other.cap.info.getNota()); // Compara por nota (ascendente)
         if (result == 0) {
-            // Si las notas son iguales, comparamos por el nombre
-            result = this.nom.compareTo(other.nom);
+            result = this.nom.compareTo(other.nom);  // Si las notas son iguales, compara por nombre
         }
         return result;
     }
+
 
     @Override
     public String toString() {
