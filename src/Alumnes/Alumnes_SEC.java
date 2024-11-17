@@ -78,13 +78,14 @@ public class Alumnes_SEC implements Comparable<Alumnes_SEC> {
     // Mètode per comparar els alumnes segons la seva nota
     @Override
     public int compareTo(Alumnes_SEC other) {
-        // Compara les notes de forma ascendent
-        int result = Double.compare(this.cap.info.getNota(), other.cap.info.getNota());
+        // Compara las notas de forma descendente (invertir el orden)
+        int result = Double.compare(other.cap.info.getNota(), this.cap.info.getNota());
         if (result == 0) {
-            result = this.nom.compareTo(other.nom);  // Si les notes són iguals, es compara per nom
+            result = this.nom.compareTo(other.nom);  // Si las notas son iguales, se compara por nombre
         }
         return result;
     }
+
 
     // Mètode per mostrar la informació de l'alumne
     @Override
