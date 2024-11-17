@@ -14,7 +14,7 @@ public class Beca {
     private AcbEnll<Alumnes_SEC> arbreACB;
     private Queue<Alumnes_SEC> llistaDescendent;
 
-    // Constructor per defecte
+    // Constructor per defecte: inicialitza els exemples i la llista descendent
     public Beca() {
         arbreACB = new AcbEnll<>();
         try {
@@ -23,13 +23,16 @@ public class Beca {
             arbreACB.inserir(exempleRandom("Maria"));
             arbreACB.inserir(exempleRandom("Josep"));
             arbreACB.inserir(exempleRandom("Anna"));
+            System.out.println("Llista ascendent: " + arbreACB.getAscendentList());
+            System.out.println("Llista descendent: " + arbreACB.getDescendentList());
+
         } catch (ArbreException e) {
-            System.out.println("Error initializing students: " + e.getMessage());
+            System.out.println("Error inicialitzant alumnes: " + e.getMessage());
         }
         llistaDescendent = arbreACB.getDescendentList();
     }
 
-    // Exemples predefinits
+    // Exemple predefinit per a Rosa
     private Alumnes_SEC exempleRosa() {
         Alumnes_SEC rosa = new Alumnes_SEC("Rosa");
         rosa.addAssignatura(new Assignatura("Fonaments de la Programació", 6, 7.0, false));
@@ -39,6 +42,7 @@ public class Beca {
         return rosa;
     }
 
+    // Exemple predefinit per a Enric
     private Alumnes_SEC exempleEnric() {
         Alumnes_SEC enric = new Alumnes_SEC("Enric");
         enric.addAssignatura(new Assignatura("Fonaments de la Programació", 6, 8, false));
@@ -48,6 +52,7 @@ public class Beca {
         return enric;
     }
 
+    // Genera un alumne amb dades aleatòries
     private Alumnes_SEC exempleRandom(String nom) {
         Alumnes_SEC randomStudent = new Alumnes_SEC(nom);
         randomStudent.addAssignatura(new Assignatura("Fonaments de la Programació", 6, Math.random() * 10, Math.random() > 0.5));
@@ -57,30 +62,23 @@ public class Beca {
         return randomStudent;
     }
 
-    // Mètodes privats
-    private boolean finalRecorregut() {
-        return llistaDescendent.isEmpty();
-    }
-
-    private Alumnes_SEC segRecorregut() {
-        if (llistaDescendent == null || llistaDescendent.isEmpty()) {
-            throw new IllegalStateException("La llista descendent està buida.");
-        }
-        return llistaDescendent.poll();
-    }
-
-
+    // Mètode per mostrar la llista d'alumnes en ordre descendent
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Llista d'alumnes en ordre descendent:\n");
-        Queue<Alumnes_SEC> copia = new LinkedList<>(llistaDescendent); // Copia per preservar l'ordre
+
+        // Crea una còpia temporal de la cua per no modificar l'original
+        Queue<Alumnes_SEC> copia = new LinkedList<>(llistaDescendent);
         while (!copia.isEmpty()) {
-            sb.append(copia.poll()).append("\n");
+            Alumnes_SEC alumne = copia.poll(); // Extreu l'alumne de la còpia
+            sb.append(alumne).append("\n");
         }
-        return sb.toString();
+
+        return sb.toString(); // Retorna el resultat
     }
 
-    // Method to delete students without honors
+
+// Method to delete students without honors
     public void esborraAlumnesSenseMatricula() {
         Queue<Alumnes_SEC> alumnes = arbreACB.getAscendentList();
         try {

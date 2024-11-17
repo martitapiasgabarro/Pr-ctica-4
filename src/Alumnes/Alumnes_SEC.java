@@ -52,11 +52,18 @@ public class Alumnes_SEC implements Comparable<Alumnes_SEC> {
         }
         return false;
     }
-
+/*
     @Override
     public int compareTo(Alumnes_SEC other) {
         return Double.compare(cap.info.getNota(), other.cap.info.getNota());
     }
+*/
+@Override
+public int compareTo(Alumnes_SEC other) {
+    int result = Double.compare(other.cap.info.getNota(), this.cap.info.getNota());
+
+    return result;
+}
 
     @Override
     public String toString() {
