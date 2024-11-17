@@ -80,6 +80,7 @@ public class Beca {
         return sb.toString();
     }
 
+
     // Method to delete students without honors
     public void esborraAlumnesSenseMatricula() {
         Queue<Alumnes_SEC> alumnes = arbreACB.getAscendentList();
@@ -102,6 +103,7 @@ public class Beca {
         String nom = scanner.nextLine().trim();
         Alumnes_SEC alumne = new Alumnes_SEC(nom);
         System.out.println("Afegeix assignatures (nom buit per finalitzar):");
+
         while (true) {
             try {
                 System.out.print("Nom de l'assignatura: ");
@@ -111,29 +113,26 @@ public class Beca {
                 int credits = scanner.nextInt();
                 System.out.print("Nota: ");
                 double nota = scanner.nextDouble();
+                scanner.nextLine(); // Netejar buffer
                 boolean mhonor = nota >= Assignatura.EXCELLENT;
                 alumne.addAssignatura(new Assignatura(nomAssignatura, credits, nota, mhonor));
-                scanner.nextLine(); // Netejar buffer
 
                 System.out.print("Afegir una altra assignatura? (yes/no): ");
                 if (!scanner.nextLine().trim().equalsIgnoreCase("yes")) break;
 
-            } catch (NumberFormatException e) {
+            } catch (Exception e) {
                 System.out.println("Entrada no vàlida. Torna-ho a intentar.");
-            } catch (IllegalArgumentException e) {
-                System.out.println("Error: " + e.getMessage());
+                scanner.nextLine(); // Netejar buffer
             }
         }
 
         try {
             arbreACB.inserir(alumne);
-            llistaDescendent = arbreACB.getDescendentList();
+            llistaDescendent = arbreACB.getDescendentList(); // Actualitza la llista
         } catch (ArbreException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
-
-
 
     // Main
     public static void main(String[] args) {

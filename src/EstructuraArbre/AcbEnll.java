@@ -161,10 +161,11 @@ public class AcbEnll<E extends Comparable<E>> implements Acb<E> {
 
     private void omplirReverseInOrdre(NodeA node, Queue<E> queue) {
         if (node == null) return;
-        omplirReverseInOrdre(node.dret, queue);
-        queue.add(node.info);
-        omplirReverseInOrdre(node.esq, queue);
+        omplirReverseInOrdre(node.esq, queue); // Processa primer el subarbre dret
+        queue.add(node.info);                   // Afegeix el node actual
+        omplirReverseInOrdre(node.dret, queue); // Processa després el subarbre esquerre
     }
+
 
     public int cardinalitat() {
         return cardinalitatRecursive(arrel);
