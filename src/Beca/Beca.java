@@ -139,7 +139,7 @@ public void esborraAlumnesSenseMatricula() {
                 scanner.nextLine(); // Netejar buffer
 
                 System.out.print("Afegir una altra assignatura? (yes/no): ");
-                if (!scanner.nextLine().trim().equalsIgnoreCase("yes")) break;
+                if (!scanner.nextLine().trim().equalsIgnoreCase("Si")) break;
 
             } catch (NumberFormatException e) {
                 System.out.println("Entrada no vàlida. Torna-ho a intentar.");
