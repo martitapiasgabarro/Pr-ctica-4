@@ -79,12 +79,12 @@ public class Beca {
             try {
                 arbreACB.esborrar(alumneTrobat); // Esborra de l'arbre
                 llistaDescendent = arbreACB.getDescendentList(); // Actualitza la llista descendent
-                System.out.println("Alumne amb nom '" + nom + "' esborrat correctament.");
+                System.out.println("Alumne amb nom '" + nom + "' esborrat correctament. \n");
             } catch (ArbreException e) {
                 System.out.println("Error en esborrar l'alumne: " + e.getMessage());
             }
         } else {
-            System.out.println("No s'ha trobat cap alumne amb el nom '" + nom + "'.");
+            System.out.println("No s'ha trobat cap alumne amb el nom '" + nom + "'. \n");
         }
     }
 
@@ -111,10 +111,11 @@ public void esborraAlumnesSenseMatricula() {
         for (Alumnes_SEC alumne : alumnes) {
             if (!alumne.hiHa(4)) { // Si l'alumne no té matrícula d'honor
                 arbreACB.esborrar(alumne); // Esborra'l de l'arbre
-                System.out.println("Alumne sense matricula d'honor eliminats \n");
 
             }
         }
+        System.out.println("Alumnes sense matricula d'honor eliminats \n");
+
         llistaDescendent = arbreACB.getDescendentList(); // Actualitza la llista descendent
     } catch (ArbreException e) {
         System.err.println("Error esborrant alumnes: " + e.getMessage());
