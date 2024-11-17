@@ -79,20 +79,19 @@ public class Beca {
 
 
 // Method to delete students without honors
-    public void esborraAlumnesSenseMatricula() {
-        Queue<Alumnes_SEC> alumnes = arbreACB.getAscendentList();
-        try {
-            while (!alumnes.isEmpty()) {
-                Alumnes_SEC alumne = alumnes.poll();
-                if (!alumne.hiHa(4)) { // Cap assignatura amb matrícula d'honor
-                    arbreACB.esborrar(alumne);
-                }
+public void esborraAlumnesSenseMatricula() {
+    Queue<Alumnes_SEC> alumnes = arbreACB.getAscendentList(); // Obté tots els alumnes en ordre ascendent
+    try {
+        for (Alumnes_SEC alumne : alumnes) {
+            if (!alumne.hiHa(4)) { // Si l'alumne no té matrícula d'honor
+                arbreACB.esborrar(alumne); // Esborra'l de l'arbre
             }
-            llistaDescendent = arbreACB.getDescendentList();
-        } catch (ArbreException e) {
-            System.err.println("Error esborrant alumnes: " + e.getMessage());
         }
+        llistaDescendent = arbreACB.getDescendentList(); // Actualitza la llista descendent
+    } catch (ArbreException e) {
+        System.err.println("Error esborrant alumnes: " + e.getMessage());
     }
+}
 
     // Method to add a new student
     public void afegirAlumne() {

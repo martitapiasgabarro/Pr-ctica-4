@@ -45,14 +45,17 @@ public class Alumnes_SEC implements Comparable<Alumnes_SEC> {
     }
 
     public boolean hiHa(int punts) {
-        Node current = cap.next;
+        Node current = cap.next; // Comença pel primer node després de la capçalera
         while (current != null) {
-            if (current.info.getPunts() == punts) return true;
-            current = current.next;
+            if (current.info.getPunts() == punts) { // Comprova els punts
+                return true; // Trobat
+            }
+            current = current.next; // Passa al següent
         }
-        return false;
+        return false; // No hi ha cap assignatura amb els punts especificats
     }
-/*
+
+    /*
     @Override
     public int compareTo(Alumnes_SEC other) {
         return Double.compare(cap.info.getNota(), other.cap.info.getNota());
